@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Alert, AlertDescription } from '../ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Alert, AlertDescription } from './ui/alert';
 import { Download } from 'lucide-react';
 import QRCode from 'qrcode';
 
@@ -9,13 +9,13 @@ const QRGenerator = () => {
   const [qrUrl, setQrUrl] = useState('');
   const [error, setError] = useState('');
   
-  // The URL that students will access
-  const attendanceUrl = window.location.origin;
+  // Replace this URL with your actual Vercel deployment URL
+  const attendanceUrl = 'https://attendance-system-delta-eight.vercel.app/';
 
   useEffect(() => {
     generateQR();
   }, []);
-
+ 
   const generateQR = async () => {
     try {
       const url = await QRCode.toDataURL(attendanceUrl, {
