@@ -9,8 +9,12 @@ const fs = require('fs').promises;
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(cors());
+// Update CORS configuration
+app.use(cors({
+  origin: ['https://attendance-system-delta-eight.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Constants

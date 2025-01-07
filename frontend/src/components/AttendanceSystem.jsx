@@ -23,53 +23,59 @@ const AttendanceSystem = () => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSubmissionStatus(null);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
+  setSubmissionStatus(null);
+  
+  if (!validateInput()) return;
+
+  try {
+    // First verify the student
+    const verifyResponse = await fetch(`http://localhost:3001/api/verify/${studentId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
     
-    if (!validateInput()) return;
-
-    try {
-      // First verify the student
-      const verifyResponse = await fetch(`http://localhost:3001/api/verify/${studentId}`);
-      const verifyData = await verifyResponse.json();
-      
-      if (!verifyData.verified) {
-        setError('Student not found in class roster. Please verify your CUNY ID.');
-        return;
-      }
-
-      setStudentData(verifyData.student);
-
-      // Submit attendance
-      const attendanceResponse = await fetch('http://localhost:3001/api/attendance', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ studentId })
-      });
-
-      const attendanceData = await attendanceResponse.json();
-
-      if (!attendanceResponse.ok) {
-        throw new Error(attendanceData.error || 'Failed to record attendance');
-      }
-      
-      setSubmissionStatus('success');
-      
-      // Reset form after successful submission
-      setTimeout(() => {
-        setStudentId('');
-        setStudentData(null);
-        setSubmissionStatus(null);
-      }, 3000);
-    } catch (err) {
-      setSubmissionStatus('error');
-      setError(err.message || 'Failed to submit attendance. Please try again.');
+    const verifyData = await verifyResponse.json();
+    
+    if (!verifyData.verified) {
+      setError('Student not found in class roster. Please verify your CUNY ID.');
+      return;
     }
-  };
+
+    setStudentData(verifyData.student);
+
+    // Submit attendance
+    const attendanceResponse = await fetch('http://localhost:3001/api/attendance', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ studentId })
+    });
+
+    const attendanceData = await attendanceResponse.json();
+
+    if (!attendanceResponse.ok) {
+      throw new Error(attendanceData.error || 'Failed to record attendance');
+    }
+    
+    setSubmissionStatus('success');
+    
+    // Reset form after successful submission
+    setTimeout(() => {
+      setStudentId('');
+      setStudentData(null);
+      setSubmissionStatus(null);
+    }, 3000);
+  } catch (err) {
+    setSubmissionStatus('error');
+    setError(err.message || 'Failed to submit attendance. Please try again.');
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
