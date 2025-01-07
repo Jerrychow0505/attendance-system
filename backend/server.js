@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 
 // Update CORS configuration
 app.use(cors({
-  origin: ['https://attendance-system-delta-eight.vercel.app', 'http://localhost:3001'],
+  origin: ['https://attendance-system-delta-eight.vercel.app', 'http://localhost:3000'],
   methods: ['GET', 'POST'],
   credentials: true
 }));
