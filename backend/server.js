@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.json());
 
 // Constants
-const EXCEL_FILE_PATH = path.join(__dirname, 'data', 'CSCI 111 Attendance Data.xlsx');
+const EXCEL_FILE_PATH = path.join(__dirname, 'data', 'CSCI_111_Attendance_Data.xlsx');
 
 // Helper function to get today's column name (e.g., "7-Jan")
 const getTodayColumn = () => {
